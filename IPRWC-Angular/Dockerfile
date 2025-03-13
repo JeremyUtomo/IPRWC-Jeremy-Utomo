@@ -41,7 +41,7 @@ RUN chown -R appuser:appgroup /usr/share/nginx/html && \
 USER appuser
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 4200
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost/ || exit 1
