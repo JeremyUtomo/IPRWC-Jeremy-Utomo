@@ -1,8 +1,17 @@
 # Stage 1: Build the application using Maven and JDK
-FROM maven:3.8-openjdk-17-slim AS build
+FROM maven:3.8.5-eclipse-temurin-17 AS builder
+
 WORKDIR /app
-COPY . /app
-RUN mvn clean package -DskipTests
+
+# Copy only the pom.xml first, and download dependencies
+COPY pom.xml ./
+RUN mvn dependency:go-offline -B
+
+# Copy the source code
+COPY src ./src
+
+# Package the application, skipping tests to speed up the build
+RUN mvn package -DskipTests
 
 # Stage 2: Create a minimal image for running the application
 FROM eclipse-temurin:17 AS runtime
