@@ -1,0 +1,124 @@
+<div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold">All Products</h1>
+      <p class="text-gray-600">Browse our collection of products</p>
+    </div>
+    
+    <!-- Filters and Sorting Controls -->
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <!-- Search -->
+      <div class="form-control flex-grow">
+        <div class="input-group">
+          <input 
+            type="text" 
+            placeholder="Search products..." 
+            class="input input-bordered w-full" 
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+          />
+        </div>
+      </div>
+      
+      <!-- Category Filter -->
+      <div class="form-control md:w-48">
+        <select class="select select-bordered w-full" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Sort Options -->
+      <div class="form-control md:w-48">
+        <select class="select select-bordered w-full" [(ngModel)]="sortOption" (change)="applyFilters()">
+          <option value="nameAsc">Name (A-Z)</option>
+          <option value="nameDesc">Name (Z-A)</option>
+          <option value="priceAsc">Price (Low-High)</option>
+          <option value="priceDesc">Price (High-Low)</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+    
+    <!-- Error State -->
+    <div *ngIf="error" class="alert alert-error shadow-lg">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Error loading products. Please try again later.</span>
+      </div>
+    </div>
+    
+    <!-- No Results -->
+    <div *ngIf="!loading && !error && filteredProducts.length === 0" class="flex flex-col items-center justify-center h-64">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="text-gray-500 text-xl font-medium">No products found</p>
+      <p class="text-gray-400">Try adjusting your search or filter criteria</p>
+    </div>
+    
+    <!-- Product Grid -->
+    <div *ngIf="!loading && !error && filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Product Card -->
+      <div *ngFor="let product of filteredProducts" class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <!-- Product Image -->
+        <figure class="px-4 pt-4">
+          <div class="square-img-container">
+            <img [src]="product.image ? 'data:image/jpeg;base64,' + product.image : 'assets/placeholder-image.jpg'" 
+                [alt]="product.name"
+                (error)="handleImageError($event)" />
+          </div>
+        </figure>
+        
+        <div class="card-body">
+          <!-- Category Badge -->
+          <div class="badge badge-secondary mb-2">{{ getCategoryName(product.categoryId) }}</div>
+          
+          <!-- Product Name -->
+          <h2 class="card-title text-lg">
+            <a [routerLink]="['/products', product.name]" class="hover:text-primary transition-colors">{{ product.name }}</a>
+          </h2>
+          
+          <!-- Product Description - Truncated -->
+          <p class="text-sm text-gray-600 line-clamp-2">{{ product.description }}</p>
+          
+          <!-- Price and Stock -->
+          <div class="flex justify-between items-center mt-4">
+            <span class="text-lg font-bold">{{ product.price | currency }}</span>
+            
+            <span *ngIf="product.stock > 0" class="badge badge-success">In Stock</span>
+            <span *ngIf="product.stock === 0" class="badge badge-error">Out of Stock</span>
+          </div>
+          
+          <!-- Add to Cart Button -->
+          <div class="card-actions justify-end mt-4">
+            <button 
+              class="btn btn-primary btn-sm" 
+              [disabled]="product.stock === 0"
+              (click)="addToCart(product)"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div *ngIf="!loading && !error && filteredProducts.length > 0" class="flex justify-center mt-8">
+      <div class="join">
+        <button class="join-item btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">«</button>
+        <button *ngFor="let page of getPageNumbers()" 
+                class="join-item btn" 
+                [class.btn-active]="page === currentPage"
+                (click)="changePage(page)">{{ page }}</button>
+        <button class="join-item btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">»</button>
+      </div>
+    </div>
+  </div>

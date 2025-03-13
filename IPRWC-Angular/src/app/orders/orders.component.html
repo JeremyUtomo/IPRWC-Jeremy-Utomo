@@ -1,0 +1,107 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold">Your Orders</h1>
+        <p class="text-gray-600">View and track your order history</p>
+      </div>
+      
+      <!-- Filter by date range -->
+      <div class="flex items-center gap-2">
+        <select [(ngModel)]="dateFilter" (change)="applyFilters()" class="select select-bordered select-sm">
+          <option value="all">All Time</option>
+          <option value="30">Last 30 Days</option>
+          <option value="90">Last 3 Months</option>
+          <option value="365">Last Year</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+    
+    <!-- Error state -->
+    <div *ngIf="error" class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Error loading your orders. Please try again later.</span>
+    </div>
+    
+    <!-- No orders state -->
+    <div *ngIf="!loading && !error && (!orders || orders.length === 0)" class="flex flex-col items-center justify-center h-64 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+      <h2 class="text-xl font-semibold mb-2">No orders yet</h2>
+      <p class="text-gray-500 mb-4">You haven't placed any orders yet.</p>
+      <a routerLink="/products" class="btn btn-primary">Browse Products</a>
+    </div>
+    
+    <!-- Orders list -->
+    <div *ngIf="!loading && !error && orders && orders.length > 0" class="flex flex-col gap-6">
+      <!-- Order card -->
+      <div *ngFor="let order of filteredOrders" class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="card-body">
+          <div class="flex flex-col md:flex-row md:justify-between">
+            <!-- Order info -->
+            <div>
+              <h2 class="card-title text-lg mb-2">
+                Order #{{ order.id.substring(0, 8).toUpperCase() }}
+                <span class="badge badge-outline ml-2">{{ getStatusBadge(order) }}</span>
+              </h2>
+              <p class="text-sm text-gray-600">Placed on {{ order.orderDate | date:'medium' }}</p>
+              <p class="mt-2"><span class="font-semibold">Total:</span> {{ order.total | currency }}</p>
+            </div>
+            
+            <!-- Order actions -->
+            <div class="flex flex-col gap-2 mt-4 md:mt-0">
+              <button class="btn btn-sm btn-outline" (click)="toggleOrderDetails(order.id)">
+                {{ expandedOrderId === order.id ? 'Hide Details' : 'View Details' }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Order details (expandable) -->
+          <div *ngIf="expandedOrderId === order.id" class="mt-6 pt-4 border-t border-gray-200">
+            <!-- Order items -->
+            <h3 class="font-semibold mb-2">Items ({{ getTotalItems(order) }})</h3>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra w-full">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.products">
+                    <td class="flex items-center gap-2">
+                      <div class="avatar">
+                        <div class="mask mask-squircle w-12 h-12 square-image-container">
+                          <img [src]="item.image ? 'data:image/jpeg;base64,' + item.image : 'assets/placeholder-image.jpg'" 
+                            [alt]="item.name"
+                            (error)="handleImageError($event)" />
+                        </div>
+                      </div>
+                      <a [routerLink]="['/products', item.name]" class="link link-hover">
+                        {{ item.name }}
+                      </a>
+                    </td>
+                    <td>{{ item.price | currency }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="text-right font-semibold">Total:</td>
+                    <td class="font-bold">{{ order.total | currency }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

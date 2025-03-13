@@ -1,0 +1,43 @@
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content flex-col">
+    <div class="text-center mb-4">
+      <h1 class="text-4xl font-bold">Login</h1>
+      <p class="py-4">Sign in to access your account</p>
+    </div>
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+      <form class="card-body" (ngSubmit)="onSubmit()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Email</span>
+          </label>
+          <input type="email" placeholder="email" class="input input-bordered" required [(ngModel)]="email" name="email" />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" placeholder="password" class="input input-bordered" required [(ngModel)]="password" name="password" />
+          <label class="label">
+            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+          </label>
+        </div>
+        
+        <!-- Error message display -->
+        <div *ngIf="errorMessage" class="alert alert-error text-sm mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+        
+        <div class="form-control mt-6">
+          <button class="btn btn-primary" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Login</span>
+            <span *ngIf="isLoading" class="loading loading-spinner loading-sm"></span>
+          </button>
+        </div>
+        <div class="text-center mt-2">
+          <p>Don't have an account? <a routerLink="/register" class="link link-primary">Register</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

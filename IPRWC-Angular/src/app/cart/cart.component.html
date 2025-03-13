@@ -1,0 +1,91 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8">Shopping Cart</h1>
+  
+  <div *ngIf="cartItems.length === 0" class="text-center py-12">
+    <div class="text-5xl mb-4">🛒</div>
+    <h2 class="text-2xl font-semibold mb-2">Your cart is empty</h2>
+    <p class="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+    <a routerLink="/products" class="btn btn-primary">Start Shopping</a>
+  </div>
+  
+  <div *ngIf="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Cart items -->
+    <div class="lg:col-span-2">
+      <div class="bg-base-100 rounded-lg shadow-lg overflow-hidden">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th class="text-center">Quantity</th>
+              <th class="text-right">Price</th>
+              <th class="text-right">Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cartItems" class="hover">
+              <td>
+                <div class="flex items-center space-x-3">
+                  <div class="avatar">
+                    <div class="mask mask-squircle w-12 h-12 square-img-container">
+                      <img [src]="item.product.image ? 'data:image/jpeg;base64,' + item.product.image : 'assets/placeholder-image.jpg'" 
+                      [alt]="item.product.name"
+                      (error)="handleImageError($event)" />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ item.product.name }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                <div class="flex items-center justify-center">
+                  <button class="btn btn-xs btn-ghost" (click)="updateQuantity(item.product.id, item.quantity - 1)">-</button>
+                  <input type="number" class="w-12 text-center input input-xs mx-1 no-spinner" 
+                         [ngModel]="item.quantity"
+                         (ngModelChange)="updateQuantity(item.product.id, $event)" 
+                         min="1" [max]="item.product.stock">
+                  <button class="btn btn-xs btn-ghost" (click)="updateQuantity(item.product.id, item.quantity + 1)">+</button>
+                </div>
+              </td>
+              <td class="text-right">{{ item.product.price | currency }}</td>
+              <td class="text-right">{{ item.product.price * item.quantity | currency }}</td>
+              <td>
+                <button class="btn btn-ghost btn-xs" (click)="removeItem(item.product.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Order summary -->
+    <div class="lg:col-span-1">
+      <div class="bg-base-100 p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+        
+        <div class="flex justify-between py-4 text-lg font-bold">
+          <span>Total</span>
+          <span>{{ subtotal | currency }}</span>
+        </div>
+        
+        <button 
+          class="btn btn-primary w-full mb-2" 
+          [disabled]="isPlacingOrder"
+          (click)="placeOrder()"
+        >
+          <span *ngIf="isPlacingOrder" class="loading loading-spinner loading-xs mr-2"></span>
+          {{ isPlacingOrder ? 'Processing...' : 'Place Order' }}
+        </button>
+        
+        <button class="btn btn-outline w-full" (click)="clearCart()">
+          Clear Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

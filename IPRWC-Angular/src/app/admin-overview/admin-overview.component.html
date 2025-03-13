@@ -1,0 +1,71 @@
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Admin Dashboard</h1>
+    
+    <!-- Quick stats -->
+    <div class="mt-8">
+      <h2 class="text-xl font-bold mb-4">Store Statistics</h2>
+      <div class="stats shadow w-full">
+        <div class="stat">
+          <div class="stat-title">Total Products</div>
+          <div class="stat-value">{{ productCount || '...' }}</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-title">Out of Stock</div>
+          <div class="stat-value text-error">{{ outOfStockCount || '...' }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Product Management Actions -->
+    <div class="my-8 flex flex-wrap gap-4">
+        <button class="btn btn-primary" routerLink="/admin/products/create">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Add New Product
+        </button>
+      </div>
+    
+    <!-- Recent products -->
+    <div class="my-8">
+      <h2 class="text-xl font-bold mb-4">Product Management</h2>
+      <div class="overflow-x-auto bg-base-100 rounded-lg shadow">
+        <table class="table w-full">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading">
+              <td colspan="4" class="text-center py-4">
+                <span class="loading loading-spinner loading-md"></span>
+              </td>
+            </tr>
+            <tr *ngIf="!loading && (!products || products.length === 0)">
+              <td colspan="4" class="text-center py-4">No products found</td>
+            </tr>
+            <tr *ngFor="let product of products">
+              <td>{{ product.name }}</td>
+              <td>{{ product.price | currency }}</td>
+              <td>
+                <span [ngClass]="product.stock > 0 ? 'text-success' : 'text-error'">
+                  {{ product.stock }}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button class="btn btn-xs btn-outline" [routerLink]="['/admin/products/edit', product.id]">Edit</button>
+                  <button class="btn btn-xs btn-error btn-outline" (click)="confirmDelete(product)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>

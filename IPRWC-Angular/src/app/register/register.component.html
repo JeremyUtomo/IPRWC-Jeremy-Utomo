@@ -1,0 +1,63 @@
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content flex-col">
+    <div class="text-center mb-4">
+      <h1 class="text-4xl font-bold">Create Account</h1>
+      <p class="py-4">Join us to start shopping</p>
+    </div>
+    <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+      <form class="card-body" (ngSubmit)="onSubmit()">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">First Name</span>
+          </label>
+          <input type="text" placeholder="first name" class="input input-bordered w-full" required [(ngModel)]="firstName" name="firstName" />
+        </div>
+        
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Last Name</span>
+          </label>
+          <input type="text" placeholder="last name" class="input input-bordered w-full" required [(ngModel)]="lastName" name="lastName" />
+        </div>
+        
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Email</span>
+          </label>
+          <input type="email" placeholder="email" class="input input-bordered" required [(ngModel)]="email" name="email" />
+        </div>
+        
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" placeholder="password" class="input input-bordered" required [(ngModel)]="password" name="password" />
+        </div>
+        
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Confirm Password</span>
+          </label>
+          <input type="password" placeholder="confirm password" class="input input-bordered" required [(ngModel)]="confirmPassword" name="confirmPassword" />
+        </div>
+        
+        <!-- Error message display -->
+        <div *ngIf="errorMessage" class="alert alert-error text-sm mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+        
+        <div class="form-control mt-6">
+          <button class="btn btn-primary" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Register</span>
+            <span *ngIf="isLoading" class="loading loading-spinner loading-sm"></span>
+          </button>
+        </div>
+        
+        <div class="text-center mt-2">
+          <p>Already have an account? <a routerLink="/login" class="link link-primary">Login</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
