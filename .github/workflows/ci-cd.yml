@@ -47,7 +47,7 @@ jobs:
     # 🔹 Build and Push Docker Images
     - name: Build and Push Docker Images
       run: |
-        docker build -t hujeremy/springboot-app:latest ./IPRWC-Springboot
-        docker build -t hujeremy/angular-app:latest ./IPRWC-Angular
+        docker build --platform linux/amd64 -t hujeremy/springboot-app:latest ./IPRWC-Springboot
+        docker build --platform linux/amd64 -t hujeremy/angular-app:latest ./IPRWC-Angular
         docker push hujeremy/springboot-app:latest
         docker push hujeremy/angular-app:latest
