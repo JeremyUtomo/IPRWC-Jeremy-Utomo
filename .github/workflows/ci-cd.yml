@@ -23,7 +23,8 @@ jobs:
     # 🔹 Build Spring Boot Backend
     - name: Build Backend with Maven
       run: |
-        cd IPRWC-SpringBoot
+        cd IPRWC-Springboot
+        ls -la  # Debug: List directory contents
         mvn clean package -DskipTests
 
     # 🔹 Setup Node.js for Angular
@@ -46,7 +47,7 @@ jobs:
     # 🔹 Build and Push Docker Images
     - name: Build and Push Docker Images
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest ./backend
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/angular-app:latest ./frontend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest ./IPRWC-Springboot
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/angular-app:latest ./IPRWC-Angular
         docker push ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/angular-app:latest
