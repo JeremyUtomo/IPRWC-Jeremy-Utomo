@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import { LoginResponse } from '../DTO/Response/LoginResponse';
 import { CookieService } from 'ngx-cookie-service';
 import { jwtDecode } from 'jwt-decode';
+import { get } from 'http';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,13 @@ export class AuthService {
     login(email: string, password: string): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(`${this.apiUrl}authenticate`, { email, password }).pipe(
             tap((response) => {
-              this.loggedIn.next(true);
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + 7);
+
+                this.loggedIn.next(true);
+                this.cookieService.set('auth_token', response.token, expirationDate, '/', undefined, true, 'Strict');
+                this.userRole.next(this.getUserRole());
+                this.userId.next(this.getUserId());
             })
           );
         }

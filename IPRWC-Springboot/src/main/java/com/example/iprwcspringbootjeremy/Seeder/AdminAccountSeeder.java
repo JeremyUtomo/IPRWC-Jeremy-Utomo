@@ -19,7 +19,7 @@ public class AdminAccountSeeder {
         user.setFirstName("Jeremy");
         user.setLastName("Utomo");
         user.setEmail("hujeremy@icloud.com");
-        user.setPassword("$2a$10$NvMn565mDZjpNsYs6P66fehsLKaeJYFgYDZX5eCAEPVvwnJO6eeBK");
+        user.setPassword("$2a$10$MEGscF8cUjPjNcc7YkUMburbYNAOxtNIEqOO1ZZ9NFovClMcYBr3W");
         user.setRole(Role.ADMIN);
         this.userDao.addUser(user);
     }

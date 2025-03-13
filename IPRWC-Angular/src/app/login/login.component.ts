@@ -25,28 +25,40 @@ export class LoginComponent {
     private userService: UserService
   ) {}
 
+  validateEmail(email: string): boolean {
+    return email.includes('@') && email.includes('.');
+  }
+
+  validatePassword(password: string): boolean {
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const hasMinLength = password.length >= 8;
+    
+    return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasMinLength;
+  }
+
   onSubmit() {
     this.isLoading = true;
     this.errorMessage = '';
 
+    // Validate email
+    if (!this.validateEmail(this.email)) {
+      this.errorMessage = 'Email must contain @ and . characters.';
+      this.isLoading = false;
+      return;
+    }
+
+    // Validate password
+    if (!this.validatePassword(this.password)) {
+      this.errorMessage = 'Password must be at least 8 characters and contain uppercase, lowercase, number, and special character.';
+      this.isLoading = false;
+      return;
+    }
+
     this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        // Store token in cookies
-        // Set expiration for 7 days (or your preferred duration)
-        const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 7);
-
-        this.cookieService.set(
-          'auth_token',
-          response.token,
-          expirationDate,
-          '/', // Path
-          undefined, // Domain
-          true, // Secure flag for HTTPS
-          'Strict' // SameSite policy
-        );
-
-        // Redirect to home or dashboard
+      next: () => {
         this.router.navigate(['/products']);
       },
       error: (error) => {
