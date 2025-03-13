@@ -42,12 +42,12 @@ jobs:
 
     # 🔹 Login to Docker Hub
     - name: Login to Docker Hub
-      run: echo "J#R#MY2005!?" | docker login -u "hujeremy" --password-stdin
+      run: echo "${ DOCKER_PASSWORD }" | docker login -u "${ DOCKER_USERNAME }" --password-stdin
 
     # 🔹 Build and Push Docker Images
     - name: Build and Push Docker Images
       run: |
-        docker build --platform linux/amd64 -t hujeremy/springboot-app:latest ./IPRWC-Springboot
-        docker build --platform linux/amd64 -t hujeremy/angular-app:latest ./IPRWC-Angular
-        docker push hujeremy/springboot-app:latest
-        docker push hujeremy/angular-app:latest
+        docker build --platform linux/amd64 -t ${ DOCKER_USERNAME }/springboot-app:latest ./IPRWC-Springboot
+        docker build --platform linux/amd64 -t ${ DOCKER_USERNAME }/angular-app:latest ./IPRWC-Angular
+        docker push ${ DOCKER_USERNAME }/springboot-app:latest
+        docker push ${ DOCKER_USERNAME }/angular-app:latest

@@ -24,6 +24,9 @@ RUN useradd -u 1001 -r -s /bin/bash nonroot
 # Copy the jar file from the build stage
 COPY --from=builder /app/target/*.jar /app/app.jar
 
+COPY src/main/resources/images /app/images
+
+
 # Ensure the application runs as the non-root user
 USER nonroot
 
