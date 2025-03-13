@@ -23,7 +23,7 @@ jobs:
     # 🔹 Build Spring Boot Backend
     - name: Build Backend with Maven
       run: |
-        cd backend
+        cd IPRWC-SpringBoot
         mvn clean package -DskipTests
 
     # 🔹 Setup Node.js for Angular
@@ -35,8 +35,8 @@ jobs:
     # 🔹 Install Dependencies & Build Angular Frontend
     - name: Build Frontend
       run: |
-        cd frontend
-        npm install
+        cd IPRWC-Angular
+        npm install --force
         npm run build -- --configuration=production
 
     # 🔹 Login to Docker Hub
