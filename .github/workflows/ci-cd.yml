@@ -19,6 +19,15 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: 'maven'  # Enable built-in Maven dependency caching
+
+    # 🔹 Cache Maven packages
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
 
     # 🔹 Build Spring Boot Backend
     - name: Build Backend with Maven
@@ -31,23 +40,54 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+        cache: 'npm'  # Enable built-in npm caching
+        cache-dependency-path: IPRWC-Angular/package-lock.json
+
+    # 🔹 Cache Node modules
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: IPRWC-Angular/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('IPRWC-Angular/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-
 
     # 🔹 Install Dependencies & Build Angular Frontend
     - name: Build Frontend
       run: |
         cd IPRWC-Angular
-        npm install
+        npm ci
         npm update
         npm run build
 
+    # 🔹 Set up Docker Buildx for better layer caching
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
     # 🔹 Login to Docker Hub
     - name: Login to Docker Hub
-      run: echo "${ DOCKER_PASSWORD }" | docker login -u "${ DOCKER_USERNAME }" --password-stdin
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # 🔹 Build and Push Docker Images
-    - name: Build and Push Docker Images
-      run: |
-        docker build --platform linux/amd64 -t ${ DOCKER_USERNAME }/springboot-app:latest ./IPRWC-Springboot
-        docker build --platform linux/amd64 -t ${ DOCKER_USERNAME }/angular-app:latest ./IPRWC-Angular
-        docker push ${ DOCKER_USERNAME }/springboot-app:latest
-        docker push ${ DOCKER_USERNAME }/angular-app:latest
+    # 🔹 Build and Push Backend Docker Image
+    - name: Build and Push Backend Image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./IPRWC-Springboot
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest
+        platforms: linux/amd64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    # 🔹 Build and Push Frontend Docker Image
+    - name: Build and Push Frontend Image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./IPRWC-Angular
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/angular-app:latest
+        platforms: linux/amd64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
