@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   postgres:
-    build: ./postgres_docker
+    build: ./postgres-docker
     ports:
       - '5432:5432'
     environment:
@@ -16,10 +16,10 @@ services:
     depends_on:
       - postgres
     environment:
-      - DB_URL=jdbc:postgresql://postgres:5432/IPRWC-Jeremy
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
-      - JWT_SECRET=${JWT_SECRET}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/IPRWC-Jeremy
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SECRET_KEY=M7qwTkRMPeuuINz0Az5HX7xRYwV4k0sWyazd8aBAVDU
 
   frontend:
     image: hujeremy/angular-app:latest
