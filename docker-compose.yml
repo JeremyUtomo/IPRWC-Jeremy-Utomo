@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  postgres:
+    build: ./postgres_docker
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    image: hujeremy/springboot-app:latest
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/IPRWC-Jeremy
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - JWT_SECRET=${JWT_SECRET}
+
+  frontend:
+    image: hujeremy/angular-app:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=localhost:8080

@@ -1,0 +1,52 @@
+name: IPRWC CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Runs only on pushes to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 🔹 Setup JDK for Spring Boot
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # 🔹 Build Spring Boot Backend
+    - name: Build Backend with Maven
+      run: |
+        cd backend
+        mvn clean package -DskipTests
+
+    # 🔹 Setup Node.js for Angular
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # 🔹 Install Dependencies & Build Angular Frontend
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm install
+        npm run build -- --configuration=production
+
+    # 🔹 Login to Docker Hub
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    # 🔹 Build and Push Docker Images
+    - name: Build and Push Docker Images
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest ./backend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/angular-app:latest ./frontend
+        docker push ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/angular-app:latest
