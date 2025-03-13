@@ -39,12 +39,12 @@ jobs:
 
     # 🔹 Login to Docker Hub
     - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      run: echo "${{ CI/CD Secrets.DOCKER_PASSWORD }}" | docker login -u "${{ CI/CD Secrets.DOCKER_USERNAME }}" --password-stdin
 
     # 🔹 Build and Push Docker Images
     - name: Build and Push Docker Images
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest ./IPRWC-Springboot
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/angular-app:latest ./IPRWC-Angular
-        docker push ${{ secrets.DOCKER_USERNAME }}/springboot-app:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/angular-app:latest
+        docker build -t ${{ CI/CD Secrets.DOCKER_USERNAME }}/springboot-app:latest ./IPRWC-Springboot
+        docker build -t ${{ CI/CD Secrets.DOCKER_USERNAME }}/angular-app:latest ./IPRWC-Angular
+        docker push ${{ CI/CD Secrets.DOCKER_USERNAME }}/springboot-app:latest
+        docker push ${{ CI/CD Secrets.DOCKER_USERNAME }}/angular-app:latest
