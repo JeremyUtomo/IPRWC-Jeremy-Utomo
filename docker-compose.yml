@@ -28,4 +28,4 @@ services:
     depends_on:
       - backend
     environment:
-      - BACKEND_URL=localhost:8080
+      - BACKEND_URL=http://backend:8080
