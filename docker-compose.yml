@@ -11,6 +11,7 @@ services:
 
   backend:
     image: hujeremy/springboot-app:latest
+    platform: linux/amd64
     ports:
       - '8080:8080'
     depends_on:
@@ -23,6 +24,7 @@ services:
 
   frontend:
     image: hujeremy/angular-app:latest
+    platform: linux/amd64
     ports:
       - "80:80"
     depends_on:
