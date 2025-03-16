@@ -1,197 +1,197 @@
 <div class="container mx-auto px-4 py-8">
-    <div class="flex items-center gap-4 mb-8">
-      <button class="btn btn-ghost" routerLink="/admin-overview">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+  <div class="flex items-center gap-4 mb-8">
+    <button class="btn btn-ghost" routerLink="/admin-overview">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Back
+    </button>
+    <h1 class="text-3xl font-bold">{{ isEdit ? 'Edit' : 'Add' }} Product</h1>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl max-w-3xl mx-auto">
+    <div class="card-body">
+      <!-- Error Message -->
+      <div *ngIf="formError" class="alert alert-error mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        Back
-      </button>
-      <h1 class="text-3xl font-bold">{{ isEdit ? 'Edit' : 'Add' }} Product</h1>
-    </div>
-  
-    <div class="card bg-base-100 shadow-xl max-w-3xl mx-auto">
-      <div class="card-body">
-        <!-- Error Message -->
-        <div *ngIf="formError" class="alert alert-error mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>{{ formError }}</span>
-        </div>
-        
-        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
-            <!-- Product Name -->
+        <span>{{ formError }}</span>
+      </div>
+      
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Product Name -->
+          <div class="form-control h-[90px]">
+            <label class="label">
+              <span class="label-text">Product Name*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              class="input input-bordered w-full" 
+              [ngClass]="{'input-error': productForm.get('name')?.invalid && productForm.get('name')?.touched}"
+            />
+            <div class="min-h-6">
+              <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="text-error text-sm mt-1">
+                <span *ngIf="productForm.get('name')?.errors?.['required']">Product name is required.</span>
+                <span *ngIf="productForm.get('name')?.errors?.['minlength']">Product name must be at least 3 characters.</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product Description -->
+          <div class="form-control">
+              <label class="label">
+              <span class="label-text">Description*</span>
+              </label>
+              <textarea 
+              formControlName="description" 
+              class="textarea textarea-bordered w-full h-24" 
+              [ngClass]="{'textarea-error': productForm.get('description')?.invalid && productForm.get('description')?.touched}"
+              ></textarea>
+              <div class="min-h-6">
+              <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="text-error text-sm mt-1">
+                  <span *ngIf="productForm.get('description')?.errors?.['required']">Description is required.</span>
+                  <span *ngIf="productForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters.</span>
+              </div>
+              </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Price -->
             <div class="form-control h-[90px]">
               <label class="label">
-                <span class="label-text">Product Name*</span>
+                <span class="label-text">Price*</span>
               </label>
               <input 
-                type="text" 
-                formControlName="name" 
+                type="number" 
+                step="0.01"
+                min="0.01"
+                formControlName="price" 
                 class="input input-bordered w-full" 
-                [ngClass]="{'input-error': productForm.get('name')?.invalid && productForm.get('name')?.touched}"
+                [ngClass]="{'input-error': productForm.get('price')?.invalid && productForm.get('price')?.touched}"
               />
               <div class="min-h-6">
-                <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="text-error text-sm mt-1">
-                  <span *ngIf="productForm.get('name')?.errors?.['required']">Product name is required.</span>
-                  <span *ngIf="productForm.get('name')?.errors?.['minlength']">Product name must be at least 3 characters.</span>
+                <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="text-error text-sm mt-1">
+                  <span *ngIf="productForm.get('price')?.errors?.['required']">Price is required.</span>
+                  <span *ngIf="productForm.get('price')?.errors?.['min']">Price must be greater than zero.</span>
                 </div>
               </div>
             </div>
             
-            <!-- Product Description -->
-            <div class="form-control">
-                <label class="label">
-                <span class="label-text">Description*</span>
-                </label>
-                <textarea 
-                formControlName="description" 
-                class="textarea textarea-bordered w-full h-24" 
-                [ngClass]="{'textarea-error': productForm.get('description')?.invalid && productForm.get('description')?.touched}"
-                ></textarea>
-                <div class="min-h-6">
-                <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="text-error text-sm mt-1">
-                    <span *ngIf="productForm.get('description')?.errors?.['required']">Description is required.</span>
-                    <span *ngIf="productForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters.</span>
-                </div>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Price -->
-              <div class="form-control h-[90px]">
-                <label class="label">
-                  <span class="label-text">Price*</span>
-                </label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  min="0.01"
-                  formControlName="price" 
-                  class="input input-bordered w-full" 
-                  [ngClass]="{'input-error': productForm.get('price')?.invalid && productForm.get('price')?.touched}"
-                />
-                <div class="min-h-6">
-                  <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="text-error text-sm mt-1">
-                    <span *ngIf="productForm.get('price')?.errors?.['required']">Price is required.</span>
-                    <span *ngIf="productForm.get('price')?.errors?.['min']">Price must be greater than zero.</span>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Stock -->
-              <div class="form-control h-[90px]">
-                <label class="label">
-                  <span class="label-text">Stock*</span>
-                </label>
-                <input 
-                  type="number" 
-                  step="1"
-                  min="0"
-                  formControlName="stock" 
-                  class="input input-bordered w-full" 
-                  [ngClass]="{'input-error': productForm.get('stock')?.invalid && productForm.get('stock')?.touched}"
-                />
-                <div class="min-h-6">
-                  <div *ngIf="productForm.get('stock')?.invalid && productForm.get('stock')?.touched" class="text-error text-sm mt-1">
-                    <span *ngIf="productForm.get('stock')?.errors?.['required']">Stock quantity is required.</span>
-                    <span *ngIf="productForm.get('stock')?.errors?.['min']">Stock cannot be negative.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Image Upload Section -->
-            <div class="form-control">
-                <label class="label">
-                <span class="label-text">Product Image*</span>
-                </label>
-                
-                <div class="flex flex-col space-y-3">
-                <!-- File input styled as a button -->
-                <label class="btn btn-outline w-full">
-                    <input 
-                    type="file"
-                    class="hidden"
-                    accept="image/*"
-                    (change)="onFileSelected($event)"
-                    />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Choose Image File
-                </label>
-                
-                <!-- Selected filename display -->
-                <div *ngIf="selectedFileName" class="text-sm">
-                    Selected file: {{ selectedFileName }}
-                </div>
-                
-                <!-- Image preview -->
-                <div *ngIf="imagePreview" class="mt-2 border rounded-md p-2 w-full">
-                    <img [src]="imagePreview" alt="Preview" class="max-h-48 mx-auto object-contain" />
-                </div>
-                
-                <!-- Hidden input to store the base64 value -->
-                <input 
-                    type="hidden" 
-                    formControlName="image"
-                />
-                
-                <div class="min-h-6">
-                    <div *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched" class="text-error text-sm">
-                    <span *ngIf="productForm.get('image')?.errors?.['required']">Product image is required.</span>
-                    </div>
-                </div>
-                </div>
-            </div>
-            
-            <!-- Category -->
+            <!-- Stock -->
             <div class="form-control h-[90px]">
               <label class="label">
-                <span class="label-text">Category*</span>
+                <span class="label-text">Stock*</span>
               </label>
-              <select 
-                formControlName="categoryId" 
-                class="select select-bordered w-full" 
-                [ngClass]="{'select-error': productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched}"
-                [disabled]="isLoadingCategories"
-              >
-                <option value="" disabled>Select a category</option>
-                <option *ngFor="let category of categories" [value]="category.id">
-                  {{ category.name }}
-                </option>
-              </select>
+              <input 
+                type="number" 
+                step="1"
+                min="0"
+                formControlName="stock" 
+                class="input input-bordered w-full" 
+                [ngClass]="{'input-error': productForm.get('stock')?.invalid && productForm.get('stock')?.touched}"
+              />
               <div class="min-h-6">
-                <div *ngIf="isLoadingCategories" class="mt-1 text-sm">
-                  <span class="loading loading-spinner loading-xs"></span> Loading categories...
-                </div>
-                <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="text-error text-sm mt-1">
-                  <span *ngIf="productForm.get('categoryId')?.errors?.['required']">Category is required.</span>
+                <div *ngIf="productForm.get('stock')?.invalid && productForm.get('stock')?.touched" class="text-error text-sm mt-1">
+                  <span *ngIf="productForm.get('stock')?.errors?.['required']">Stock quantity is required.</span>
+                  <span *ngIf="productForm.get('stock')?.errors?.['min']">Stock cannot be negative.</span>
                 </div>
               </div>
             </div>
-            
-            <!-- Submit button -->
-            <div class="card-actions justify-end mt-4">
-                <button 
-                type="button" 
-                class="btn btn-ghost" 
-                routerLink="/admin-overview"
-                [disabled]="isSubmitting"
-                >
-                Cancel
-                </button>
-                <button 
-                type="submit" 
-                class="btn btn-primary" 
-                [disabled]="isSubmitting || productForm.invalid"
-                >
-                <span *ngIf="isSubmitting" class="loading loading-spinner loading-xs mr-2"></span>
-                {{ isEdit ? 'Update' : 'Save' }} Product
-                </button>
+          </div>
+          
+          <!-- Image Upload Section -->
+          <div class="form-control">
+              <label class="label">
+              <span class="label-text">Product Image*</span>
+              </label>
+              
+              <div class="flex flex-col space-y-3">
+              <!-- File input styled as a button -->
+              <label class="btn btn-outline w-full">
+                  <input 
+                  type="file"
+                  class="hidden"
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Choose Image File
+              </label>
+              
+              <!-- Selected filename display -->
+              <div *ngIf="selectedFileName" class="text-sm">
+                  Selected file: {{ selectedFileName }}
+              </div>
+              
+              <!-- Image preview -->
+              <div *ngIf="imagePreview" class="mt-2 border rounded-md p-2 w-full">
+                  <img [src]="imagePreview" alt="Preview" class="max-h-48 mx-auto object-contain" />
+              </div>
+              
+              <!-- Hidden input to store the base64 value -->
+              <input 
+                  type="hidden" 
+                  formControlName="image"
+              />
+              
+              <div class="min-h-6">
+                  <div *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched" class="text-error text-sm">
+                  <span *ngIf="productForm.get('image')?.errors?.['required']">Product image is required.</span>
+                  </div>
+              </div>
+              </div>
+          </div>
+          
+          <!-- Category -->
+          <div class="form-control h-[90px]">
+            <label class="label">
+              <span class="label-text">Category*</span>
+            </label>
+            <select 
+              formControlName="categoryId" 
+              class="select select-bordered w-full" 
+              [ngClass]="{'select-error': productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched}"
+              [disabled]="isLoadingCategories"
+            >
+              <option value="" disabled>Select a category</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div class="min-h-6">
+              <div *ngIf="isLoadingCategories" class="mt-1 text-sm">
+                <span class="loading loading-spinner loading-xs"></span> Loading categories...
+              </div>
+              <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="text-error text-sm mt-1">
+                <span *ngIf="productForm.get('categoryId')?.errors?.['required']">Category is required.</span>
+              </div>
             </div>
-          </form>
-      </div>
+          </div>
+          
+          <!-- Submit button -->
+          <div class="card-actions justify-end mt-4">
+              <button 
+              type="button" 
+              class="btn btn-ghost" 
+              routerLink="/admin-overview"
+              [disabled]="isSubmitting"
+              >
+              Cancel
+              </button>
+              <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="isSubmitting || productForm.invalid || !selectedFile"
+              >
+              <span *ngIf="isSubmitting" class="loading loading-spinner loading-xs mr-2"></span>
+              {{ isEdit ? 'Update' : 'Save' }} Product
+              </button>
+          </div>
+        </form>
     </div>
   </div>
+</div>

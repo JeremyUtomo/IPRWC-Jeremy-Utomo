@@ -5,8 +5,16 @@ import com.example.iprwcspringbootjeremy.DAO.ProductDao;
 import com.example.iprwcspringbootjeremy.DTO.Request.ProductRequest;
 import com.example.iprwcspringbootjeremy.DTO.Response.ProductResponse;
 import com.example.iprwcspringbootjeremy.Model.Product;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -16,6 +24,8 @@ public class ProductService {
 
     private final ProductDao productDao;
     private final CategoryDao categoryDao;
+    @Value("${IMAGE_PATH}")
+    private String IMAGE_PATH;
 
     public ProductService(ProductDao productDao, CategoryDao categoryDao) {
         this.productDao = productDao;
@@ -62,6 +72,11 @@ public class ProductService {
         this.productDao.deleteProduct(product);
     }
 
+    public Resource getProductImage(String fileName) throws MalformedURLException {
+        Path filePath = Paths.get(IMAGE_PATH + "/" + fileName);
+        return new UrlResource(filePath.toUri());
+    }
+
     private Product productRequestToProduct(Product product, ProductRequest productRequest) {
         product.setName(productRequest.getName());
         product.setPrice(productRequest.getPrice());
@@ -69,7 +84,16 @@ public class ProductService {
         product.setDescription(productRequest.getDescription());
         product.setCategory(this.categoryDao.getCategoryByID(productRequest.getCategoryId()));
         try {
-            product.setImage(Base64.getDecoder().decode(productRequest.getImage()));
+            MultipartFile imageFile = productRequest.getImage();
+            String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+            Path filePath = Paths.get(IMAGE_PATH, fileName);
+
+            // Save the image file to the filesystem
+            Files.createDirectories(filePath.getParent()); // Ensure directory exists
+            Files.copy(imageFile.getInputStream(), filePath);
+
+            // Store the file path in the database
+            product.setImage(fileName);
         } catch (Exception e) {
             product.setImage(null);
         }

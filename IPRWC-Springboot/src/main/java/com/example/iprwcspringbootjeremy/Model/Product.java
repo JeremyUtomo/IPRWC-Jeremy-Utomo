@@ -22,10 +22,7 @@ public class Product {
     private String description;
     private Double price;
     private Integer stock;
-
-    @Lob
-    @JsonIgnore
-    private byte[] image;
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

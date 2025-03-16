@@ -22,8 +22,7 @@ public class ProductSeeder {
         product.setStock(stock);
         product.setDescription(description);
         try {
-            byte[] imageBytes = Files.readAllBytes(Paths.get("/app/images/" + imagePath));
-            product.setImage(imageBytes);
+            product.setImage(imagePath);
         } catch (Exception e) {
             e.printStackTrace();
             product.setId(null);

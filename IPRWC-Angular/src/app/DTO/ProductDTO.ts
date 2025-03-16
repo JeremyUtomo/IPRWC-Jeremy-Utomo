@@ -4,6 +4,6 @@ export interface ProductDTO {
     description: string;
     price: number;
     stock: number;
-    image: string;
+    image: File | string;
     categoryId: string;
 }

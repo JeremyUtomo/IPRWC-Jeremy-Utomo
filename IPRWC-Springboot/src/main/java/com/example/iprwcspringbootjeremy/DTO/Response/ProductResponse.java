@@ -15,6 +15,6 @@ public class ProductResponse {
     private String description;
     private Double price;
     private Integer stock;
-    private byte[] image;
+    private String image;
     private String categoryId;
 }

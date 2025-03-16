@@ -58,7 +58,7 @@ export class ProductFormComponent implements OnInit {
       description: ['', [Validators.required, Validators.minLength(10)]],
       price: [0, [Validators.required, Validators.min(0.01)]],
       stock: [0, [Validators.required, Validators.min(0)]],
-      image: ['', this.isEdit ? [] : [Validators.required]],
+      image: [null, [Validators.required]],
       categoryId: ['', Validators.required]
     });
   }
@@ -88,12 +88,6 @@ export class ProductFormComponent implements OnInit {
           stock: product.stock,
           categoryId: product.categoryId
         });
-        
-        // Display existing image
-        if (product.image) {
-          this.imagePreview = `data:image/jpeg;base64,${product.image}`;
-          this.selectedFileName = 'Current image';
-        }
       },
       error: (error) => {
         console.error('Error loading product:', error);
@@ -110,15 +104,15 @@ export class ProductFormComponent implements OnInit {
       this.selectedFile = input.files[0];
       this.selectedFileName = this.selectedFile.name;
       
+      // Update the form control value
+      this.productForm.patchValue({ image: this.selectedFile });
+      this.productForm.get('image')?.updateValueAndValidity();
+      
       // Create a FileReader to read the file as data URL (base64)
       const reader = new FileReader();
       reader.onload = () => {
         // Get the base64 string (remove data:image/... prefix)
         const base64String = reader.result as string;
-        const base64Content = base64String.split(',')[1];
-        
-        // Set the image value in the form
-        this.productForm.get('image')?.setValue(base64Content);
         
         // Set the preview
         this.imagePreview = base64String;
@@ -143,10 +137,21 @@ export class ProductFormComponent implements OnInit {
     
     const productData: ProductRequest = this.productForm.value;
     
+    // Create FormData object to send the file and other product details
+    const formData = new FormData();
+    formData.append('name', productData.name);
+    formData.append('description', productData.description);
+    formData.append('price', productData.price.toString());
+    formData.append('stock', productData.stock.toString());
+    formData.append('categoryId', productData.categoryId);
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+    
     // Choose between add or update
     const saveOperation = this.isEdit && this.productId
-      ? this.productService.updateProduct(productData, this.productId)
-      : this.productService.addProduct(productData);
+      ? this.productService.updateProduct(formData, this.productId)
+      : this.productService.addProduct(formData);
       
     saveOperation.subscribe({
       next: (savedProduct) => {

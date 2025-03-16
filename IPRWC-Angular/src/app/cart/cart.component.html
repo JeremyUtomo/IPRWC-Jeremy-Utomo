@@ -28,9 +28,9 @@
                 <div class="flex items-center space-x-3">
                   <div class="avatar">
                     <div class="mask mask-squircle w-12 h-12 square-img-container">
-                      <img [src]="item.product.image ? 'data:image/jpeg;base64,' + item.product.image : 'assets/placeholder-image.jpg'" 
-                      [alt]="item.product.name"
-                      (error)="handleImageError($event)" />
+                      <img [src]="item.product.image" 
+                           [alt]="item.product.name"
+                           (error)="handleImageError($event)" />
                     </div>
                   </div>
                   <div>

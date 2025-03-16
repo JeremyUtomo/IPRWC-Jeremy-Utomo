@@ -32,14 +32,11 @@ public class ProductDao {
     }
 
     public Product getProductByName(String name) {
+        productRepository.findAll();
         return productRepository.findByName(name);
     }
 
     public void deleteProduct(Product product) {
         productRepository.delete(product);
-    }
-
-    public void updateStock(UUID productId, int i) {
-
     }
 }
