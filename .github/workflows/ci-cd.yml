@@ -100,16 +100,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+
     - name: Copy docker-compose.yml to server
-      run: |
-        echo "${{ secrets.DOCKER_USERNAME }}" > key.pem
-        echo "${{ secrets.SSH_KEY }}" > key.pem
-        chmod 600 key.pem
-        scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
+      run: scp -o StrictHostKeyChecking=no ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
 
     - name: Deploy application
       run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} root@${{ secrets.IPV4 }} "
+        ssh -o StrictHostKeyChecking=no root@${{ secrets.IPV4 }} "
           echo '${{ secrets.DOCKERHUB_PASSWORD }}' | docker login -u hujeremy --password-stdin &&
           docker-compose pull &&
           docker-compose down &&
