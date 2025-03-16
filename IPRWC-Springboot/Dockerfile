@@ -26,6 +26,7 @@ COPY --from=builder /app/target/*.jar /app/app.jar
 
 COPY src/main/resources/images /app/images
 
+RUN mkdir -p /app/images && chown -R nonroot:nonroot /app/images
 
 # Ensure the application runs as the non-root user
 USER nonroot

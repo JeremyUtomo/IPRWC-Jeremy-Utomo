@@ -19,6 +19,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SECRET_KEY=M7qwTkRMPeuuINz0Az5HX7xRYwV4k0sWyazd8aBAVDU
+      - IMAGE_PATH=/app/images
 
   frontend:
     image: hujeremy/angular-app:latest
