@@ -111,7 +111,7 @@ jobs:
     - name: Deploy application
       run: |
         ssh -o StrictHostKeyChecking=no root@${{ secrets.IPV4 }} "
-          echo '${{ secrets.DOCKERHUB_PASSWORD }}' | docker login -u hujeremy --password-stdin &&
+          echo '${{ secrets.DOCKER_PASSWORD }}' | docker login -u $ {{ secrets.DOCKER_USERNAME }} --password-stdin &&
           docker-compose pull &&
           docker-compose down &&
           docker-compose up -d"
