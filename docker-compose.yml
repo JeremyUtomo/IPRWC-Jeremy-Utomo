@@ -1,6 +1,7 @@
 services:
   postgres:
-    build: ./postgres-docker
+    image: postgres:latest
+    platform: linux/amd64
     ports:
       - '5432:5432'
     environment:
