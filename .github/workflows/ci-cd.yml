@@ -106,7 +106,9 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Copy docker-compose.yml to server
-      run: scp -o StrictHostKeyChecking=no ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
+      run: |
+        scp -o StrictHostKeyChecking=no ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
+        scp -o StrictHostKeyChecking=no ./postgres-docker root@${{ secrets.IPV4 }}:/root
 
     - name: Deploy application
       run: |
