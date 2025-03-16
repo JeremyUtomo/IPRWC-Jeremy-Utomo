@@ -102,6 +102,7 @@ jobs:
 
     - name: Copy docker-compose.yml to server
       run: |
+        echo "${{ secrets.DOCKER_USERNAME }}" > key.pem
         echo "${{ secrets.SSH_KEY }}" > key.pem
         chmod 600 key.pem
         scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
