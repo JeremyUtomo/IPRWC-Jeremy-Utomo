@@ -100,11 +100,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
-
     - name: Copy docker-compose.yml to server
       run: scp -o StrictHostKeyChecking=no -i ${{ secrets.SSH_KEY }} ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
 
