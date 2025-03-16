@@ -108,7 +108,9 @@ jobs:
     - name: Copy docker-compose.yml to server
       run: |
         scp -o StrictHostKeyChecking=no ./docker-compose.yml root@${{ secrets.IPV4 }}:/root
-        scp -o StrictHostKeyChecking=no ./postgres-docker root@${{ secrets.IPV4 }}:/root
+
+    - name: Copy Dockerfile to server
+      run: scp -o StrictHostKeyChecking=no ./postgres-docker/Dockerfile root@${{ secrets.IPV4 }}:/root/postgres-docker
 
     - name: Deploy application
       run: |
