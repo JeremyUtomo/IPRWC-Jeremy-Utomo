@@ -46,7 +46,7 @@ export class AuthService {
                 expirationDate.setDate(expirationDate.getDate() + 7);
 
                 this.loggedIn.next(true);
-                this.cookieService.set('auth_token', response.token, expirationDate, '/', undefined, true, 'Strict');
+                this.cookieService.set('auth_token', response.token, expirationDate, '/', undefined, false, 'Strict');
                 this.userRole.next(this.getUserRole());
                 this.userId.next(this.getUserId());
             })
