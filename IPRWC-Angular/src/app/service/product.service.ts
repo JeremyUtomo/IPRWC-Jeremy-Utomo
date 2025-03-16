@@ -60,7 +60,6 @@ export class ProductService {
         if (!(fileName).includes('http')) {
             return `${this.apiUrl}/image/${fileName}`;
         }
-        console.log(fileName);
         return fileName;
     }
 }

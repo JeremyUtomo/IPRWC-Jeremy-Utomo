@@ -74,7 +74,6 @@ public class ProductService {
 
     public Resource getProductImage(String fileName) throws MalformedURLException {
         Path filePath = Paths.get(IMAGE_PATH + "/" + fileName);
-        System.out.println(filePath);
         return new UrlResource(filePath.toUri());
     }
 
@@ -91,14 +90,11 @@ public class ProductService {
 
             // Save the image file to the filesystem
             Files.createDirectories(filePath.getParent()); // Ensure directory exists
-            System.out.println(filePath);
             Files.copy(imageFile.getInputStream(), filePath);
-            System.out.println(fileName);
 
             // Store the file path in the database
             product.setImage(fileName);
         } catch (Exception e) {
-            System.out.println("Error saving image: " + e.getMessage());
             product.setImage(null);
         }
         return product;

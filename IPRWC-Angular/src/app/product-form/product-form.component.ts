@@ -155,7 +155,6 @@ export class ProductFormComponent implements OnInit {
       
     saveOperation.subscribe({
       next: (savedProduct) => {
-        console.log('Product saved:', savedProduct);
         this.router.navigate(['/admin-overview']);
       },
       error: (error) => {

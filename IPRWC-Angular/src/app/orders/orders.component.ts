@@ -33,7 +33,6 @@ export class OrdersComponent implements OnInit {
   
     this.orderService.getOrderByUserId().subscribe({
       next: (response) => {
-        console.log('Orders loaded:', response);
         // Filter out orders with no items
         this.orders = response.filter(order => order.products && order.products.length > 0);
         this.applyFilters();
