@@ -16,9 +16,9 @@ public class AdminAccountSeeder {
     public void seed(){
         User user = new User();
         user.setId(UUID.randomUUID());
-        user.setFirstName("Jeremy");
-        user.setLastName("Utomo");
-        user.setEmail("hujeremy@icloud.com");
+        user.setFirstName("Admin");
+        user.setLastName("Admin");
+        user.setEmail("admin@mail.com");
         user.setPassword("$2a$10$MEGscF8cUjPjNcc7YkUMburbYNAOxtNIEqOO1ZZ9NFovClMcYBr3W");
         user.setRole(Role.ADMIN);
         this.userDao.addUser(user);
