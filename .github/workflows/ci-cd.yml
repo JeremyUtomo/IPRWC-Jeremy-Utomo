@@ -86,7 +86,7 @@ jobs:
         cd IPRWC-Angular
         npm ci
         npm update
-        npm run build
+        # npm run build
 
     # 🔹 Set up Docker Buildx for better layer caching
     - name: Set up Docker Buildx
