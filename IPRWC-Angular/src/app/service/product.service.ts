@@ -59,6 +59,8 @@ export class ProductService {
     }
 
     getProductImage(fileName: string): string {
+        console.log(fileName);
+        console.log(this.imageApiUrl);
         if (!(fileName).includes(this.imageApiUrl)) {
             return `${this.apiUrl}/${fileName}`;
         }
