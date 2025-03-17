@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 })
 export class OrderService {
     // private apiUrl = 'http://localhost:8080/api/v1/order';
-    private apiUrl = 'http://167.71.69.170/api/v1/order';
+    private apiUrl = 'http://167.71.69.170:8080/api/v1/order';
     private userId: string = '';
 
     constructor(
