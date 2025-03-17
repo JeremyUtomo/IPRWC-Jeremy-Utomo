@@ -112,7 +112,6 @@ public class ProductController {
     @RequestMapping(value = "/image/{fileName}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws MalformedURLException {
-        System.out.println(fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(this.productService.getProductImage(fileName));

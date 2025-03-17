@@ -74,7 +74,6 @@ public class ProductService {
 
     public Resource getProductImage(String fileName) throws MalformedURLException {
         Path filePath = Paths.get(IMAGE_PATH + "/" + fileName);
-        System.out.println(filePath);
         return new UrlResource(filePath.toUri());
     }
 
