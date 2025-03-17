@@ -11,6 +11,7 @@ import { ProductRequest } from '../DTO/Request/productRequest';
 export class ProductService {
     // private apiUrl = 'http://localhost:8080/api/v1/product';
     private apiUrl = 'http://167.71.69.170/api/v1/product';
+    private imageApiUrl = 'http://167.71.69.170:8080/api/v1/product/image';
 
     constructor(
         private http: HttpClient
@@ -58,8 +59,8 @@ export class ProductService {
     }
 
     getProductImage(fileName: string): string {
-        if (!(fileName).includes('http')) {
-            return `${this.apiUrl}/image/${fileName}`;
+        if (!(fileName).includes(this.imageApiUrl)) {
+            return `${this.apiUrl}/${fileName}`;
         }
         return fileName;
     }
