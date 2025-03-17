@@ -62,7 +62,7 @@ export class ProductService {
         console.log(fileName);
         console.log(this.imageApiUrl);
         if (!(fileName).includes(this.imageApiUrl)) {
-            return `${this.apiUrl}/${fileName}`;
+            return `${this.imageApiUrl}/${fileName}`;
         }
         return fileName;
     }
