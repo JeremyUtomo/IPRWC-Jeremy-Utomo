@@ -60,7 +60,7 @@ export class ProductService {
 
     getProductImage(fileName: string): string {
         if (!(fileName).includes(this.apiImageUrl)) {
-            return `${this.apiImageUrl}/image/${fileName}`;
+            return `${this.apiImageUrl}/${fileName}`;
         }
         return fileName;
     }
