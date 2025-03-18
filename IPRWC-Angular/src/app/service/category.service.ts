@@ -9,7 +9,7 @@ import { CategoryDTO } from '../DTO/CategoryDTO';
 })
 export class CategoryService {
     // private apiUrl = 'http://localhost:8080/api/v1/category';
-    private apiUrl = 'http://167.71.69.170:8080/api/v1/category';
+    private apiUrl = 'http://167.71.69.170/api/v1/category';
 
     constructor(
         private http: HttpClient

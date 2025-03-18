@@ -14,7 +14,7 @@ import { userRequest } from '../DTO/Request/userRequest';
 })
 export class UserService {
     // private apiUrl = 'http://localhost:8080/api/v1/user';
-    private apiUrl = 'http://167.71.69.170:8080/api/v1/user';
+    private apiUrl = 'http://167.71.69.170/api/v1/user';
 
     private userid: string = '';
 

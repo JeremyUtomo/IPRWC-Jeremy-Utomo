@@ -13,7 +13,7 @@ import { get } from 'http';
 })
 export class AuthService {
     // private apiUrl = 'http://localhost:8080/api/v1/auth/';
-    private apiUrl = 'http://167.71.69.170:8080/api/v1/auth/';
+    private apiUrl = 'http://167.71.69.170/api/v1/auth/';
 
 
     private loggedIn = new BehaviorSubject<boolean>(false);
