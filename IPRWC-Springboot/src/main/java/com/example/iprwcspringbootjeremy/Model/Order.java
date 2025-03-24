@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_order")
+@Table(name = "orders")
 public class Order {
 
     @Id
